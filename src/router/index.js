@@ -3,28 +3,43 @@ import Router from 'vue-router'
 const DashboardLayout = () =>
     import ( /* webpackChunkName: "dashboard" */ '../components/dashboardLayout.vue')
 
+const loginLayout = () => 
+    import(/* webpackChunkName: "dashboard" */ '../components/loginLayout.vue') 
+
 function loadView(view) {
     return () =>
         import ( /* webpackChunkName: "view-[request]" */ `../components/dashboardContents/${view}.vue`)
 }
-const routes = [{
-    path: '',
-    component: DashboardLayout,
-    children: 
-    [
-        {
-            name: 'UserController',
-            path: '',
-            component: loadView('userController')
-        },
-        {
-            name: 'VehicleController',
-            path: '/vehicle',
-            component: loadView('vehiclesController')
-        },
-    ]
-}, 
-]
-Vue.use(Router)
-const router = new Router({ mode: 'history', routes: routes })
-export default router
+const routes = [     
+    {       
+        path: '/dashboard',       
+        component: DashboardLayout,       
+        children: [         
+            {           
+                name: 'Dashboard',           
+                path: '/dashboard',           
+                component: loadView('dashboard')         
+            },
+            {           
+                name: 'UserController',           
+                path: '/userController',           
+                component: loadView('userController')         
+            },
+            {           
+                name: 'VehiclesController',           
+                path: '/vehiclesController',           
+                component: loadView('vehiclesController')         
+            }        
+        ]     
+    },
+    {
+        path: '/',
+        component: loginLayout,
+        name: 'loginLayout'
+    }   
+]   
+Vue.use(Router) 
+ 
+const router = new Router({mode: 'history', routes: routes}) 
+ 
+export default router   
